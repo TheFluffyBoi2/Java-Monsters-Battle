@@ -14,6 +14,10 @@ public class InputHandler implements KeyListener {
         observers.add(window);
     }
 
+    public void removeObserver(KeyEventObserver window) {
+        observers.remove(window);
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         for (KeyEventObserver observer : observers) {

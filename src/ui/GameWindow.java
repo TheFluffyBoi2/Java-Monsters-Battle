@@ -11,11 +11,16 @@ import game.GameState;
 import input.InputHandler;
 
 public class GameWindow extends JFrame implements KeyEventObserver {
+    private final TitleScreen titleScreen;
+    private final ModeScreen modeSelect;
+    private final InputHandler inputHandler;
     private GameState gameState;
     private JPanel cards;
     private CardLayout cardLayout;
 
     public GameWindow(InputHandler inputHandler) {
+        this.inputHandler = inputHandler;
+
         gameState = GameState.TITLE_SCREEN;
         setTitle("Monsters Battle");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,14 +30,14 @@ public class GameWindow extends JFrame implements KeyEventObserver {
         cardLayout = new CardLayout();
         cards = new JPanel(cardLayout);
 
-        TitleScreen titleScreen = new TitleScreen();
-        ModeSelect modeSelect = new ModeSelect();
+        titleScreen = new TitleScreen();
+        modeSelect = new ModeScreen();
         
         cards.add(titleScreen, "TITLE_SCREEN");
         cards.add(modeSelect, "MODE_SELECT");
 
-        inputHandler.addObserver(titleScreen);
-        inputHandler.addObserver(this);
+        this.inputHandler.addObserver(titleScreen);
+        this.inputHandler.addObserver(this);
 
         setContentPane(cards);
         pack();
@@ -48,7 +53,10 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     System.out.println("Exit title screen");
                     gameState = GameState.MODE_SELECT;
-                    cardLayout.show(cards, "MODE_SELECT");
+                    cardLayout.show(cards, "MODE_SELECT");  
+                    inputHandler.addObserver(modeSelect);
+                    inputHandler.removeObserver(titleScreen);
+                    requestFocusInWindow();
                 }
                 break;
             }    
