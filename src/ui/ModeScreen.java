@@ -2,14 +2,12 @@ package ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Menu;
 import java.awt.event.KeyEvent;
-import java.security.KeyPairGenerator;
-
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import sound.SoundManager;
 
 public class ModeScreen extends JPanel implements KeyEventObserver {
     private final MenuButton[] menuButtons = new MenuButton[2];
@@ -40,9 +38,15 @@ public class ModeScreen extends JPanel implements KeyEventObserver {
         setBackground(Color.WHITE);
     }
 
+    public MenuButton getSelectedButton() {
+        MenuButton selectedButton = (menuButtons[0].getSelected()) ? menuButtons[0] : menuButtons[1];
+        return selectedButton;
+    } 
+
     @Override
     public void onKeyEvent(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
+            SoundManager.playSound("Select.wav");
             MenuButton selectedButton = (menuButtons[0].getSelected()) ? menuButtons[0] : menuButtons[1];
             MenuButton deselectedButton = (!menuButtons[0].getSelected()) ? menuButtons[0] : menuButtons[1];
             selectedButton.setDeselected();

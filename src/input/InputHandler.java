@@ -20,7 +20,7 @@ public class InputHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        for (KeyEventObserver observer : observers) {
+        for (KeyEventObserver observer : new ArrayList<>(observers)) {
             observer.onKeyEvent(e);
         }
     }

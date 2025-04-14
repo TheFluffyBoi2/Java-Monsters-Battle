@@ -2,7 +2,6 @@ package ui;
 
 import java.awt.Color;
 import java.awt.Font;
-
 import javax.swing.JButton;
 
 public class MenuButton extends JButton {
