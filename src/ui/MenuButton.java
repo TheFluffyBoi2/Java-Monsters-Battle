@@ -3,6 +3,7 @@ package ui;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 public class MenuButton extends JButton {
     private boolean isSelected;
@@ -23,6 +24,7 @@ public class MenuButton extends JButton {
         setBorderPainted(false);
         setContentAreaFilled(false);
         setFocusPainted(false);
+        setHorizontalAlignment(SwingConstants.LEFT);
         setOpaque(false);
     }
 

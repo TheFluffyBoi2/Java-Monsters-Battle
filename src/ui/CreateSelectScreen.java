@@ -23,17 +23,17 @@ public class CreateSelectScreen extends JPanel implements KeyEventObserver {
         label.setBounds(10, 10, image.getIconWidth(), image.getIconHeight());
 
         MenuButton createMonster = new MenuButton("MONSTER");
-        MenuButton createTeam = new MenuButton("TEAM");
+        MenuButton createMove = new MenuButton("MOVE");
         MenuButton createEnemy = new MenuButton("ENEMY");
         menuButtons[0] = createMonster;
-        menuButtons[1] = createTeam;
+        menuButtons[1] = createMove;
         menuButtons[2] = createEnemy;
         createMonster.setSelected();
         int offset = 30;
         for (MenuButton button : menuButtons) {
             add(button);
             setComponentZOrder(button, 0);
-            button.setBounds(5, offset, 250, 40);
+            button.setBounds(20, offset, 250, 40);
             offset += 60;
         }
 

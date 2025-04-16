@@ -1,4 +1,4 @@
-package entities;
+package entities.Monsters;
 
 import java.util.List;
 import java.util.Vector;

@@ -29,7 +29,7 @@ public class ModeScreen extends JPanel implements KeyEventObserver {
         for (MenuButton button : menuButtons) {
             add(button);
             setComponentZOrder(button, 0);
-            button.setBounds(10, offset, 200, 40);
+            button.setBounds(20, offset, 200, 40);
             offset += 60;
         }
 

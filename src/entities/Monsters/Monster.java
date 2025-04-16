@@ -1,6 +1,8 @@
-package entities;
+package entities.Monsters;
 
 import java.util.Objects;
+
+import entities.Moves.Move;
 
 public class Monster {
     private String name;

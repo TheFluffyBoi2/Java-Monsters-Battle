@@ -1,7 +1,9 @@
-package entities;
+package entities.Moves;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import entities.Type;
 
 public class MoveService {
     private static List<Move> moves = new ArrayList<>();

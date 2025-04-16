@@ -6,22 +6,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 
 import entities.Type;
-import entities.Monster;
-import entities.MonsterService;
-import entities.Move;
-import entities.MoveService;
+import entities.Monsters.Monster;
+import entities.Monsters.MonsterService;
+import entities.Moves.Move;
+import entities.Moves.MoveService;
 
 public class CreateMonsterScreen extends JPanel {
     private final JTextField nameField;
@@ -63,29 +60,34 @@ public class CreateMonsterScreen extends JPanel {
         JLabel exitText = new JLabel("Press esc to exit");
 
         gbc.gridx = 0; gbc.gridy = 0;
+        add(nameLabel, gbc);
+        gbc.gridx = 1;
+        add(nameField, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
         add(healthLabel, gbc);
         gbc.gridx = 1;
         add(healthField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0; gbc.gridy = 2;
         add(attackLabel, gbc);
         gbc.gridx = 1;
         add(attackField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0; gbc.gridy = 3;
         add(moveLabel1, gbc);
         gbc.gridx = 1;
         add(moveBox1, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3;
+        gbc.gridx = 0; gbc.gridy = 4;
         add(moveLabel2, gbc);
         gbc.gridx = 1;
         add(moveBox2, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
         add(createButton, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 5;
+        gbc.gridx = 0; gbc.gridy = 6;
         add(exitText, gbc);
 
         createButton.addActionListener(this::createMonster);
@@ -109,6 +111,7 @@ public class CreateMonsterScreen extends JPanel {
 
             JOptionPane.showMessageDialog(this, "Monster Created!");
 
+            nameField.setText("");
             healthField.setText("");
             attackField.setText("");
             moveBox1.setSelectedIndex(0);
@@ -116,6 +119,15 @@ public class CreateMonsterScreen extends JPanel {
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Enter valid numbers!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void refreshMoveBoxes() {
+        moveBox1.removeAllItems();
+        moveBox2.removeAllItems();
+        for (Move m : MoveService.getMoves()) {
+            moveBox1.addItem(m);
+            moveBox2.addItem(m);
         }
     }
 }

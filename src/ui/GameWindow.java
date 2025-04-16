@@ -1,10 +1,13 @@
 package ui;
 
 import java.awt.CardLayout;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.nio.channels.SelectableChannel;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import game.GameState;
 import input.InputHandler;
@@ -15,6 +18,7 @@ public class GameWindow extends JFrame implements KeyEventObserver {
     private final ModeScreen modeSelect;
     private final CreateSelectScreen createSelect;
     private final CreateMonsterScreen createMonster;
+    private final CreateMoveScreen createMove;
     private final InputHandler inputHandler;
     private GameState gameState;
     private JPanel cards;
@@ -36,20 +40,31 @@ public class GameWindow extends JFrame implements KeyEventObserver {
         modeSelect = new ModeScreen();
         createSelect = new CreateSelectScreen();
         createMonster = new CreateMonsterScreen();
+        createMove = new CreateMoveScreen();
         
         cards.add(titleScreen, "TITLE_SCREEN");
         cards.add(modeSelect, "MODE_SELECT");
         cards.add(createSelect, "CREATE_SELECT");
         cards.add(createMonster, "CREATE_MONSTER");
+        cards.add(createMove, "CREATE_MOVE");
 
         this.inputHandler.addObserver(titleScreen);
         this.inputHandler.addObserver(this);
 
         setContentPane(cards);
         pack();
-        addKeyListener(inputHandler);
         setFocusable(true);
         requestFocusInWindow();
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (e.getID() == KeyEvent.KEY_PRESSED) {
+                    inputHandler.keyPressed(e);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -82,8 +97,8 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                     }
                     if (selectedButton.getText().equals("BATTLE")) {
                         SoundManager.playSound("Start.wav");
-                        gameState = GameState.BATTLE;
-                        System.out.println("BATTLE SCREEN");
+                        // gameState = GameState.BATTLE;
+                        JOptionPane.showMessageDialog(this, "The battle mechanic will be implemented for the 2nd checkpoint");
                     }
                 }
                 break;
@@ -95,15 +110,19 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                     if (createButton.getText().equals("MONSTER")) {
                         SoundManager.playSound("Start.wav");
                         gameState = GameState.CREATE_MONSTER;
+                        createMonster.refreshMoveBoxes();
                         cardLayout.show(cards, "CREATE_MONSTER");
                         pack();
                         inputHandler.removeObserver(createSelect);
                         requestFocusInWindow();
                     }
-                    if (createButton.getText().equals("TEAM")) {
+                    if (createButton.getText().equals("MOVE")) {
                         SoundManager.playSound("Start.wav");
-                        gameState = GameState.CREATE_TEAM;
-                        System.out.println("CREATE TEAM SCREEN");
+                        gameState = GameState.CREATE_MOVE;
+                        cardLayout.show(cards, "CREATE_MOVE");
+                        pack();
+                        inputHandler.removeObserver(createSelect);
+                        requestFocusInWindow();
                     }
                     if (createButton.getText().equals("ENEMY")) {
                         SoundManager.playSound("Start.wav");
@@ -111,9 +130,11 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                         System.out.println("CREATE ENEMY SCREEN");
                     }
                 }
+                break;
             }
 
-            case CREATE_MONSTER: {
+            case CREATE_MONSTER:
+            case CREATE_MOVE: {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     SoundManager.playSound("Start.wav");
                     gameState = GameState.CREATE_SELECT;
@@ -122,6 +143,7 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                     inputHandler.addObserver(createSelect);
                     requestFocusInWindow();
                 }
+                break;
             }
 
             default:

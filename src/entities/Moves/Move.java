@@ -1,4 +1,6 @@
-package entities;
+package entities.Moves;
+
+import entities.Type;
 
 public class Move {
     private String name;
