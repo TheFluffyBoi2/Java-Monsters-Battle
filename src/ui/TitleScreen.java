@@ -1,6 +1,5 @@
 package ui;
 
-import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

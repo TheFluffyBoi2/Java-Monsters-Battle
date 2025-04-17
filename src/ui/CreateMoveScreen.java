@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -7,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -15,8 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import entities.Type;
-import entities.Monsters.Monster;
-import entities.Monsters.MonsterService;
 import entities.Moves.Move;
 import entities.Moves.MoveFactory;
 import entities.Moves.MoveService;
@@ -30,11 +30,20 @@ public class CreateMoveScreen extends JPanel {
     private final JButton createButton;
 
     public CreateMoveScreen() {
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
         setPreferredSize(new Dimension(512, 512));
         setBackground(Color.WHITE);
+
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/assets/container3.png")));
+        background.setLayout(new GridBagLayout());
+        add(background, BorderLayout.CENTER);
+
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setOpaque(false);
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel nameLabel = new JLabel("Name:");
         nameField = new JTextField(10);
@@ -50,25 +59,27 @@ public class CreateMoveScreen extends JPanel {
         JLabel exitText = new JLabel("Press esc to exit");
 
         gbc.gridx = 0; gbc.gridy = 0;
-        add(nameLabel, gbc);
+        contentPanel.add(nameLabel, gbc);
         gbc.gridx = 1;
-        add(nameField, gbc);
+        contentPanel.add(nameField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 1;
-        add(damageLabel, gbc);
+        contentPanel.add(damageLabel, gbc);
         gbc.gridx = 1;
-        add(damageField, gbc);
+        contentPanel.add(damageField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;
-        add(typeLabel, gbc);
+        contentPanel.add(typeLabel, gbc);
         gbc.gridx = 1;
-        add(typeBox, gbc);
+        contentPanel.add(typeBox, gbc);
 
         gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
-        add(createButton, gbc);
+        contentPanel.add(createButton, gbc);
 
         gbc.gridx = 0; gbc.gridy = 5;
-        add(exitText, gbc);
+        contentPanel.add(exitText, gbc);
+
+        background.add(contentPanel);
 
         createButton.addActionListener(this::createMove);
     }

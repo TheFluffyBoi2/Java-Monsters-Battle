@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.nio.channels.SelectableChannel;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,6 +18,8 @@ public class GameWindow extends JFrame implements KeyEventObserver {
     private final CreateSelectScreen createSelect;
     private final CreateMonsterScreen createMonster;
     private final CreateMoveScreen createMove;
+    private final CreateTeamScreen createTeam;
+    private final DeleteMonsterScreen deleteMonster;
     private final InputHandler inputHandler;
     private GameState gameState;
     private JPanel cards;
@@ -41,12 +42,16 @@ public class GameWindow extends JFrame implements KeyEventObserver {
         createSelect = new CreateSelectScreen();
         createMonster = new CreateMonsterScreen();
         createMove = new CreateMoveScreen();
+        createTeam = new CreateTeamScreen();
+        deleteMonster = new DeleteMonsterScreen();
         
         cards.add(titleScreen, "TITLE_SCREEN");
         cards.add(modeSelect, "MODE_SELECT");
         cards.add(createSelect, "CREATE_SELECT");
         cards.add(createMonster, "CREATE_MONSTER");
         cards.add(createMove, "CREATE_MOVE");
+        cards.add(createTeam, "CREATE_TEAM");
+        cards.add(deleteMonster, "DELETE_MONSTER");
 
         this.inputHandler.addObserver(titleScreen);
         this.inputHandler.addObserver(this);
@@ -124,16 +129,31 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                         inputHandler.removeObserver(createSelect);
                         requestFocusInWindow();
                     }
-                    if (createButton.getText().equals("ENEMY")) {
+                    if (createButton.getText().equals("TEAM")) {
                         SoundManager.playSound("Start.wav");
-                        gameState = GameState.CREATE_ENEMY;
-                        System.out.println("CREATE ENEMY SCREEN");
+                        gameState = GameState.CREATE_TEAM;
+                        createTeam.refreshMonsterBoxes();
+                        cardLayout.show(cards, "CREATE_TEAM");
+                        pack();
+                        inputHandler.removeObserver(createSelect);
+                        requestFocusInWindow();
+                    }
+                    if (createButton.getText().equals("DELETE MONSTER")) {
+                        SoundManager.playSound("Start.wav");
+                        gameState = GameState.DELETE_MONSTER;
+                        deleteMonster.refreshMonsterBox();
+                        cardLayout.show(cards, "DELETE_MONSTER");
+                        pack();
+                        inputHandler.removeObserver(createSelect);
+                        requestFocusInWindow();
                     }
                 }
                 break;
             }
 
+            case DELETE_MONSTER:
             case CREATE_MONSTER:
+            case CREATE_TEAM:
             case CREATE_MOVE: {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     SoundManager.playSound("Start.wav");

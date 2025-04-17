@@ -22,6 +22,13 @@ public class Monster {
         this.attack = attack;
     }
 
+    public Monster(String name, int health, int attack, Move[] moves) {
+        this.name = name;
+        this.health = health;
+        this.attack = attack;
+        this.moves = moves;
+    }
+
     public void setMoves(Move[] moves) {
         int index = 0;
         for (Move move : moves) {
@@ -48,7 +55,7 @@ public class Monster {
 
     @Override
     public String toString() {
-        return "Monster " + name + " attack " + attack + " health " + health + " moves " + moves.toString();
+        return name;
     }
 
     @Override

@@ -12,28 +12,30 @@ import sound.SoundManager;
 
 public class CreateSelectScreen extends JPanel implements KeyEventObserver {
     private int selectedIndex = 0;
-    private final MenuButton[] menuButtons = new MenuButton[3];
+    private final MenuButton[] menuButtons = new MenuButton[4];
 
     public CreateSelectScreen() {
         setLayout(null);
 
-        ImageIcon image = new ImageIcon(getClass().getResource("/assets/container.png"));
+        ImageIcon image = new ImageIcon(getClass().getResource("/assets/container2.png"));
         JLabel label = new JLabel(image);
         add(label);
         label.setBounds(10, 10, image.getIconWidth(), image.getIconHeight());
 
         MenuButton createMonster = new MenuButton("MONSTER");
         MenuButton createMove = new MenuButton("MOVE");
-        MenuButton createEnemy = new MenuButton("ENEMY");
+        MenuButton createTeam = new MenuButton("TEAM");
+        MenuButton deleteMonster = new MenuButton("DELETE MONSTER");
         menuButtons[0] = createMonster;
         menuButtons[1] = createMove;
-        menuButtons[2] = createEnemy;
+        menuButtons[2] = createTeam;
+        menuButtons[3] = deleteMonster;
         createMonster.setSelected();
         int offset = 30;
         for (MenuButton button : menuButtons) {
             add(button);
             setComponentZOrder(button, 0);
-            button.setBounds(20, offset, 250, 40);
+            button.setBounds(20, offset, 400, 40);
             offset += 60;
         }
 
@@ -53,21 +55,21 @@ public class CreateSelectScreen extends JPanel implements KeyEventObserver {
     public void onKeyEvent(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             selectedIndex += 1;
-            selectedIndex = (selectedIndex > 2) ? 0 : selectedIndex;
+            selectedIndex = (selectedIndex > 3) ? 0 : selectedIndex;
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             selectedIndex -= 1;
-            selectedIndex = (selectedIndex < 0) ? 2 : selectedIndex;
+            selectedIndex = (selectedIndex < 0) ? 3 : selectedIndex;
         }
         menuButtons[selectedIndex].setSelected();
-        for (int i = 0; i <= 2; i++) {
+        for (int i = 0; i <= 3; i++) {
             if (i != selectedIndex) {
                 menuButtons[i].setDeselected();
             }
         }
         SoundManager.playSound("Select.wav");
         menuButtons[selectedIndex].setSelected();
-        for (int i = 0; i <= 2; i++) {
+        for (int i = 0; i <= 3; i++) {
             if (i != selectedIndex) {
                 menuButtons[i].setDeselected();
             }

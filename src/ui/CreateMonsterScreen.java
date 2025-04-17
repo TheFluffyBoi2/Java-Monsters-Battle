@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -7,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -32,11 +34,20 @@ public class CreateMonsterScreen extends JPanel {
     private final JButton createButton;
 
     public CreateMonsterScreen() {
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
         setPreferredSize(new Dimension(512, 512));
         setBackground(Color.WHITE);
+
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/assets/container3.png")));
+        background.setLayout(new GridBagLayout());
+        add(background, BorderLayout.CENTER);
+
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setOpaque(false);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel nameLabel = new JLabel("Name:");
         nameField = new JTextField(10);
@@ -60,35 +71,37 @@ public class CreateMonsterScreen extends JPanel {
         JLabel exitText = new JLabel("Press esc to exit");
 
         gbc.gridx = 0; gbc.gridy = 0;
-        add(nameLabel, gbc);
+        contentPanel.add(nameLabel, gbc);
         gbc.gridx = 1;
-        add(nameField, gbc);
+        contentPanel.add(nameField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 1;
-        add(healthLabel, gbc);
+        contentPanel.add(healthLabel, gbc);
         gbc.gridx = 1;
-        add(healthField, gbc);
+        contentPanel.add(healthField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2;
-        add(attackLabel, gbc);
+        contentPanel.add(attackLabel, gbc);
         gbc.gridx = 1;
-        add(attackField, gbc);
+        contentPanel.add(attackField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;
-        add(moveLabel1, gbc);
+        contentPanel.add(moveLabel1, gbc);
         gbc.gridx = 1;
-        add(moveBox1, gbc);
+        contentPanel.add(moveBox1, gbc);
 
         gbc.gridx = 0; gbc.gridy = 4;
-        add(moveLabel2, gbc);
+        contentPanel.add(moveLabel2, gbc);
         gbc.gridx = 1;
-        add(moveBox2, gbc);
+        contentPanel.add(moveBox2, gbc);
 
         gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
-        add(createButton, gbc);
+        contentPanel.add(createButton, gbc);
 
         gbc.gridx = 0; gbc.gridy = 6;
-        add(exitText, gbc);
+        contentPanel.add(exitText, gbc);
+
+        background.add(contentPanel);
 
         createButton.addActionListener(this::createMonster);
     }
@@ -107,7 +120,7 @@ public class CreateMonsterScreen extends JPanel {
             Monster monster = new Monster(name, health, attack);
             monster.setMoves(selectedMoves);
             MonsterService.addMonster(monster);
-            System.out.println(monster);
+            System.out.println("Monster: " + monster + " was created");
 
             JOptionPane.showMessageDialog(this, "Monster Created!");
 

@@ -11,6 +11,8 @@ public class MoveFactory {
                 return new WaterMove(name, type, damage);
             case GRASS:
                 return new GrassMove(name, type, damage);
+            case NORMAL:
+                return new Move(name, type, damage);
             default:
                 return null;
         }
