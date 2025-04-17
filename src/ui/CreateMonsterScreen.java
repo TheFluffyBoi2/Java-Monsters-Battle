@@ -3,6 +3,7 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -15,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import entities.Type;
 import entities.Monsters.Monster;
@@ -68,7 +70,7 @@ public class CreateMonsterScreen extends JPanel {
 
         createButton = new JButton("Create Monster");
 
-        JLabel exitText = new JLabel("Press esc to exit");
+        JLabel exitText = new JLabel("Press esc to exit", JLabel.CENTER);
 
         gbc.gridx = 0; gbc.gridy = 0;
         contentPanel.add(nameLabel, gbc);
@@ -102,6 +104,25 @@ public class CreateMonsterScreen extends JPanel {
         contentPanel.add(exitText, gbc);
 
         background.add(contentPanel);
+
+        try {
+            Font pkmnFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/PKMN RBYGSC.ttf")).deriveFont(20f);
+            nameLabel.setFont(pkmnFont);
+            healthLabel.setFont(pkmnFont);
+            attackLabel.setFont(pkmnFont);
+            moveLabel1.setFont(pkmnFont);
+            moveLabel2.setFont(pkmnFont);
+            createButton.setFont(pkmnFont);
+            exitText.setFont(pkmnFont);
+            nameField.setFont(pkmnFont);
+            healthField.setFont(pkmnFont);
+            attackField.setFont(pkmnFont);
+            moveBox1.setFont(pkmnFont);
+            moveBox2.setFont(pkmnFont);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         createButton.addActionListener(this::createMonster);
     }

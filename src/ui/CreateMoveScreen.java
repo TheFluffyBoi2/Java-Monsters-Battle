@@ -3,6 +3,7 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -40,7 +41,7 @@ public class CreateMoveScreen extends JPanel {
 
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setOpaque(false);
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -56,7 +57,7 @@ public class CreateMoveScreen extends JPanel {
 
         createButton = new JButton("Create Move");
 
-        JLabel exitText = new JLabel("Press esc to exit");
+        JLabel exitText = new JLabel("Press esc to exit", JLabel.CENTER);
 
         gbc.gridx = 0; gbc.gridy = 0;
         contentPanel.add(nameLabel, gbc);
@@ -80,6 +81,21 @@ public class CreateMoveScreen extends JPanel {
         contentPanel.add(exitText, gbc);
 
         background.add(contentPanel);
+
+        try {
+            Font pkmnFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/PKMN RBYGSC.ttf")).deriveFont(20f);
+            nameLabel.setFont(pkmnFont);
+            damageLabel.setFont(pkmnFont);
+            damageField.setFont(pkmnFont);
+            typeLabel.setFont(pkmnFont);
+            typeBox.setFont(pkmnFont);
+            createButton.setFont(pkmnFont);
+            exitText.setFont(pkmnFont);
+            nameField.setFont(pkmnFont);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         createButton.addActionListener(this::createMove);
     }

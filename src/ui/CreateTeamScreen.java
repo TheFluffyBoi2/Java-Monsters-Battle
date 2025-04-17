@@ -3,6 +3,7 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -52,7 +53,7 @@ public class CreateTeamScreen extends JPanel {
         
         createButton = new JButton("Create Team");
 
-        JLabel exitText = new JLabel("Press esc to exit");
+        JLabel exitText = new JLabel("Press esc to exit", JLabel.CENTER);
 
         gbc.gridx = 0; gbc.gridy = 0;
         contentPanel.add(firstMonsterLabel, gbc);
@@ -76,6 +77,22 @@ public class CreateTeamScreen extends JPanel {
         contentPanel.add(exitText, gbc);
 
         background.add(contentPanel);
+
+        try {
+            Font pkmnFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/PKMN RBYGSC.ttf")).deriveFont(18f);
+            firstMonsterLabel.setFont(pkmnFont);
+            firstMonster.setFont(pkmnFont);
+            secondMonsterLabel.setFont(pkmnFont);
+            secondMonster.setFont(pkmnFont);
+            thirsMonsterLabel.setFont(pkmnFont);
+            thirdMonster.setFont(pkmnFont);
+            createButton.setFont(pkmnFont);
+            createButton.setFont(pkmnFont);
+            exitText.setFont(pkmnFont);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         createButton.addActionListener(this::createTeam);
     }

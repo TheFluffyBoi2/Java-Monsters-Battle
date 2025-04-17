@@ -3,6 +3,7 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -59,6 +60,18 @@ public class DeleteMonsterScreen extends JPanel {
         contentPanel.add(exitText, gbc);
 
         background.add(contentPanel);
+
+        try {
+            Font pkmnFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/PKMN RBYGSC.ttf")).deriveFont(20f);
+            deletedLabel.setFont(pkmnFont);
+            deletedMonster.setFont(pkmnFont);
+            deleteButton.setFont(pkmnFont);
+            exitText.setFont(pkmnFont);
+            exitText.setFont(pkmnFont);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         deleteButton.addActionListener(this::deleteMonster);
     }
