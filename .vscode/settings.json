@@ -1,6 +1,13 @@
 {
-    "java.project.sourcePaths": [
-        "src"
-    ],
-    "java.project.referencedLibraries": []
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "monsterbattles",
+            "database": "monsterbattles",
+            "username": "postgres"
+        }
+    ]
 }

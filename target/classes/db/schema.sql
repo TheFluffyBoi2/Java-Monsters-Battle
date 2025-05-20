@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS move CASCADE;
+
+CREATE TABLE IF NOT EXISTS move (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    type VARCHAR(10) NOT NULL,
+    damage INT NOT NULL,
+    effect VARCHAR(10),
+    effect_chance DOUBLE PRECISION
+);
