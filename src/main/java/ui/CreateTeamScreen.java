@@ -9,6 +9,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -50,7 +53,7 @@ public class CreateTeamScreen extends JPanel {
         secondMonster = new JComboBox<>(MonsterService.getMonsters().toArray(new Monster[0]));
         thirdMonster = new JComboBox<>(MonsterService.getMonsters().toArray(new Monster[0]));
         
-        createButton = new JButton("Create Team");
+        createButton = new JButton("Update Team");
 
         JLabel exitText = new JLabel("Press esc to exit", JLabel.CENTER);
 
@@ -105,24 +108,39 @@ public class CreateTeamScreen extends JPanel {
                 return;
             }
 
+            List<Monster> monsters = new ArrayList<>();
             Monster monster1 = (Monster) firstMonster.getSelectedItem();
             Monster monster2 = (Monster) secondMonster.getSelectedItem();
             Monster monster3 = (Monster) thirdMonster.getSelectedItem();
+            monsters.add(monster1);
+            monsters.add(monster2);
+            monsters.add(monster3);
 
-            Player.addMonster(monster1);
-            Player.addMonster(monster2);
-            Player.addMonster(monster3);
+            try {
+                Player.updateTeam(monsters);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
 
             JOptionPane.showMessageDialog(this, "Team Created!");
 
             System.out.println("Team created with the following monsters:");
-            for (Monster m : Player.getMonsters()) {
-                System.out.println(m);
+
+            try {
+                for (Monster m : Player.findAll()) {
+                    System.out.println(m);
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
             }
 
-            firstMonster.setSelectedItem(Player.getMonsters()[0]);
-            secondMonster.setSelectedItem(Player.getMonsters()[1]);
-            thirdMonster.setSelectedItem(Player.getMonsters()[2]);
+            try {
+                firstMonster.setSelectedItem(Player.findAll().get(0));
+                secondMonster.setSelectedItem(Player.findAll().get(1));
+                thirdMonster.setSelectedItem(Player.findAll().get(2));
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Select A Valid Monster!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -139,17 +157,12 @@ public class CreateTeamScreen extends JPanel {
                 thirdMonster.addItem(m);
             }
 
-            if (Player.getIndex() == 0) {
-                createButton.setText("Create Team");
-            } else {
-                createButton.setText("Update Team");
-                firstMonster.setSelectedItem(Player.getMonsters()[0]);
-                secondMonster.setSelectedItem(Player.getMonsters()[1]);
-                thirdMonster.setSelectedItem(Player.getMonsters()[2]);
-            }
+        try {
+            firstMonster.setSelectedItem(Player.findAll().get(0));
+            secondMonster.setSelectedItem(Player.findAll().get(1));
+            thirdMonster.setSelectedItem(Player.findAll().get(2));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
-
-        public void updateMonsterBoxes() {
-
-        }
+    }
 }

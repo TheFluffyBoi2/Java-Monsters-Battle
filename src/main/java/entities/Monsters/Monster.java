@@ -1,5 +1,7 @@
 package entities.Monsters;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import entities.Moves.Move;
@@ -8,7 +10,7 @@ public class Monster {
     private String name;
     private int health;
     private int attack;
-    private Move[] moves = new Move[2];
+    private List<Move> moves = new ArrayList<>();
 
     public Monster() {
         name = "Default name";
@@ -22,19 +24,19 @@ public class Monster {
         this.attack = attack;
     }
 
-    public Monster(String name, int health, int attack, Move[] moves) {
+    public Monster(String name, int health, int attack, List<Move> moves) {
         this.name = name;
         this.health = health;
         this.attack = attack;
         this.moves = moves;
     }
 
-    public void setMoves(Move[] moves) {
-        int index = 0;
-        for (Move move : moves) {
-            moves[index] = move;
-            index++;
-        }
+    public void setMoves(List<Move> moves) {
+        this.moves = moves;
+    }
+
+    public List<Move> getMoves() {
+        return moves;
     }
 
     public int getHealth() {
@@ -43,6 +45,10 @@ public class Monster {
 
     public int getAttack() {
         return attack;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setHealth(int health) {
@@ -63,7 +69,7 @@ public class Monster {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Monster monster = (Monster) obj;
-        return name == monster.name && health == monster.health && attack == monster.attack;
+        return Objects.equals(name, monster.name) && health == monster.health && attack == monster.attack;
     }
 
     @Override

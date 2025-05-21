@@ -1,5 +1,8 @@
 package ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -131,15 +134,13 @@ public class CreateMonsterScreen extends JPanel {
             String name = nameField.getText();
             int health = Integer.parseInt(healthField.getText());
             int attack = Integer.parseInt(attackField.getText());
-            Move[] selectedMoves = new Move[] {
-                (Move) moveBox1.getSelectedItem(),
-                (Move) moveBox2.getSelectedItem()
-            };
+            List<Move> selectedMoves = new ArrayList<>();
+            selectedMoves.add((Move) moveBox1.getSelectedItem());
+            selectedMoves.add((Move) moveBox2.getSelectedItem());
             // Type type = (Type) typeBox.getSelectedItem();
 
             Monster monster = new Monster(name, health, attack);
-            monster.setMoves(selectedMoves);
-            MonsterService.addMonster(monster);
+            MonsterService.addMonster(monster, selectedMoves);
             System.out.println("Monster: " + monster + " was created");
 
             JOptionPane.showMessageDialog(this, "Monster Created!");
