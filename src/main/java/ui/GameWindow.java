@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import game.GameState;
@@ -22,6 +21,9 @@ public class GameWindow extends JFrame implements KeyEventObserver {
     private final CreateMoveScreen createMove;
     private final CreateTeamScreen createTeam;
     private final DeleteMonsterScreen deleteMonster;
+    private final BattleScreen battleScreen;
+    private final GameEndScreen gameOver;
+    private final GameEndScreen gameWon; 
     private final InputHandler inputHandler;
     private GameState gameState;
     private JPanel cards;
@@ -47,6 +49,9 @@ public class GameWindow extends JFrame implements KeyEventObserver {
         createMove = new CreateMoveScreen();
         createTeam = new CreateTeamScreen();
         deleteMonster = new DeleteMonsterScreen();
+        battleScreen = new BattleScreen(this);
+        gameOver = new GameEndScreen("Game Over!");
+        gameWon = new GameEndScreen("You Won!");
         
         cards.add(titleScreen, "TITLE_SCREEN");
         cards.add(modeSelect, "MODE_SELECT");
@@ -55,6 +60,9 @@ public class GameWindow extends JFrame implements KeyEventObserver {
         cards.add(createMove, "CREATE_MOVE");
         cards.add(createTeam, "CREATE_TEAM");
         cards.add(deleteMonster, "DELETE_MONSTER");
+        cards.add(battleScreen, "BATTLE_SCREEN");
+        cards.add(gameOver, "GAME_OVER");
+        cards.add(gameWon, "GAME_WON");
 
         this.inputHandler.addObserver(titleScreen);
         this.inputHandler.addObserver(this);
@@ -105,14 +113,42 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                     }
                     if (selectedButton.getText().equals("BATTLE")) {
                         SoundManager.playSound("Start.wav");
-                        // gameState = GameState.BATTLE;
-                        JOptionPane.showMessageDialog(this, "The battle mechanic will be implemented for the 2nd checkpoint");
+                        gameState = GameState.BATTLE;
+                        battleScreen.refreshBattleScreen();
+                        cardLayout.show(cards, "BATTLE_SCREEN");
+                        pack();
+                        inputHandler.addObserver(battleScreen);
+                        inputHandler.removeObserver(modeSelect);
+                        requestFocusInWindow();
+                        // JOptionPane.showMessageDialog(this, "The battle mechanic will be implemented for the 2nd checkpoint");
                     }
                 }
                 break;
             }
 
+            case BATTLE: {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    SoundManager.playSound("Start.wav");
+                    gameState = GameState.MODE_SELECT;
+                    cardLayout.show(cards, "MODE_SELECT");
+                    pack();
+                    inputHandler.addObserver(modeSelect);
+                    inputHandler.removeObserver(battleScreen);
+                    requestFocusInWindow();
+                }
+                break;
+            }
+
             case CREATE_SELECT: {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    SoundManager.playSound("Start.wav");
+                    gameState = GameState.MODE_SELECT;
+                    cardLayout.show(cards, "MODE_SELECT");
+                    pack();
+                    inputHandler.addObserver(modeSelect);
+                    inputHandler.removeObserver(createSelect);
+                    requestFocusInWindow();
+                }
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     MenuButton createButton = createSelect.getSelectedButton();
                     if (createButton.getText().equals("MONSTER")) {
@@ -154,6 +190,18 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                 break;
             }
 
+            case GAME_END: {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    SoundManager.playSound("Start.wav");
+                    gameState = GameState.TITLE_SCREEN;
+                    cardLayout.show(cards, "TITLE_SCREEN");
+                    pack();
+                    inputHandler.addObserver(titleScreen);
+                    requestFocusInWindow();
+                }
+                break;
+            }
+
             case DELETE_MONSTER:
             case CREATE_MONSTER:
             case CREATE_TEAM:
@@ -172,5 +220,19 @@ public class GameWindow extends JFrame implements KeyEventObserver {
             default:
                 break;
         }
+    }
+
+    public void showGameOverScreen() {
+        gameState = GameState.GAME_END;
+        cardLayout.show(cards, "GAME_OVER");
+        inputHandler.removeObserver(battleScreen);
+        requestFocusInWindow();
+    }
+
+    public void showGameWonScreen() {
+        gameState = GameState.GAME_END;
+        cardLayout.show(cards, "GAME_WON");
+        inputHandler.removeObserver(battleScreen);
+        requestFocusInWindow();
     }
 }

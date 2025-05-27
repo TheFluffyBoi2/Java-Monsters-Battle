@@ -18,17 +18,17 @@ public class Player {
         return index;
     }
     
-    static {
-        try {
-            List<Monster> monsters = findAll();
-            if (monsters.isEmpty()) {
-                monsters = MonsterService.getMonsters();
-                updateTeam(monsters);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+    // static {
+    //     try {
+    //         List<Monster> monsters = findAll();
+    //         if (monsters.isEmpty()) {
+    //             monsters = MonsterService.getMonsters();
+    //             updateTeam(monsters);
+    //         }
+    //     } catch (Exception e) {
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
 
     public static List<Monster> findAll() throws Exception {
         String sql = "SELECT monster1_id, monster2_id, monster3_id FROM team;";

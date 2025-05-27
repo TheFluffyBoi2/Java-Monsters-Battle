@@ -3,6 +3,7 @@ package entities.Monsters;
 import java.util.ArrayList;
 import java.util.List;
 
+import audit.Audit;
 import entities.Moves.Move;
 import entities.Moves.MoveService;
 
@@ -11,24 +12,26 @@ public class MonsterService {
 
     static {
         DAO = new MonsterDAO();
-        List<Move> movesList = MoveService.getMoves();
-        try {
-            if (movesList.size() < 2) {
-                System.out.println("Nu sunt destule atacuri pentru a initializa un monstru");
-            }
-            else if (DAO.findAll().isEmpty()) {
-                DAO.insert(new Monster("Starter 1", 100, 50), movesList);
-                DAO.insert(new Monster("Starter 2", 250, 20), movesList);
-                DAO.insert(new Monster("Starter 3", 80, 80), movesList);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
+    //     List<Move> movesList = MoveService.getMoves();
+    //     try {
+    //         if (movesList.size() < 2) {
+    //             System.out.println("Nu sunt destule atacuri pentru a initializa un monstru");
+    //         }
+    //         else if (DAO.findAll().isEmpty()) {
+    //             DAO.insert(new Monster("Starter 1", 100, 50), movesList);
+    //             DAO.insert(new Monster("Starter 2", 250, 20), movesList);
+    //             DAO.insert(new Monster("Starter 3", 80, 80), movesList);
+    //         }
+    //     } catch (Exception e) {
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
 
     public static void addMonster(Monster monster, List<Move> moves) {
         try {
             DAO.insert(monster, moves); 
+            Audit.writeAudit("Add Monster");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -37,6 +40,7 @@ public class MonsterService {
     public static void deleteMonster(Monster monster) {
         try {
             DAO.deleteMonster(monster);
+            Audit.writeAudit("Delete Monster");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -44,6 +48,7 @@ public class MonsterService {
 
     public static List<Monster> getMonsters() {
         try {
+            Audit.writeAudit("Get Monsters");
             return DAO.findAll();
         } catch (Exception e) {
             System.out.println(e.getMessage());

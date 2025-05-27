@@ -9,5 +9,5 @@ public enum GameState {
     CREATE_TEAM,
     DELETE_MONSTER,
     BATTLE,
-    GAME_OVER
+    GAME_END
 }

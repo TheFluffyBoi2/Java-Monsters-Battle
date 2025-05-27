@@ -26,3 +26,32 @@ CREATE TABLE IF NOT EXISTS team (
     monster2_id INT REFERENCES monster(id),
     monster3_id INT REFERENCES monster(id)
 );
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM monster) THEN
+        INSERT INTO monster (name, health, attack) VALUES
+            ('Starter 1', 100, 50),
+            ('Starter 2', 250, 20),
+            ('Starter 3', 80, 80);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM move) THEN
+        INSERT INTO move (name, type, damage) VALUES
+            ('Tackle', 'NORMAL', 40),
+            ('Pound', 'NORMAL', 60);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM monster_move) THEN
+        INSERT INTO monster_move (monster_id, move_id) VALUES
+            (1, 1),
+            (1, 2),
+            (2, 1),
+            (2, 2),
+            (3, 1),
+            (3, 2);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM team) THEN
+        INSERT INTO team (monster1_id, monster2_id, monster3_id) VALUES
+            (1, 2, 3);
+    END IF;
+END
+$$;

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.spi.DirStateFactory.Result;
-
 import database.DatabaseManager;
 import entities.Type;
 import entities.Moves.FireMove;
