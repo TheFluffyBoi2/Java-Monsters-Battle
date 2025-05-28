@@ -7,8 +7,10 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import entities.Player.TeamService;
 import game.GameState;
 import input.InputHandler;
 import sound.SoundManager;
@@ -20,11 +22,12 @@ public class GameWindow extends JFrame implements KeyEventObserver {
     private final CreateMonsterScreen createMonster;
     private final CreateMoveScreen createMove;
     private final CreateTeamScreen createTeam;
+    private final CreateItemScreen createItem;
     private final DeleteMonsterScreen deleteMonster;
-    private final BattleScreen battleScreen;
     private final GameEndScreen gameOver;
     private final GameEndScreen gameWon; 
     private final InputHandler inputHandler;
+    private BattleScreen battleScreen;
     private GameState gameState;
     private JPanel cards;
     private CardLayout cardLayout;
@@ -48,8 +51,8 @@ public class GameWindow extends JFrame implements KeyEventObserver {
         createMonster = new CreateMonsterScreen();
         createMove = new CreateMoveScreen();
         createTeam = new CreateTeamScreen();
+        createItem = new CreateItemScreen();
         deleteMonster = new DeleteMonsterScreen();
-        battleScreen = new BattleScreen(this);
         gameOver = new GameEndScreen("Game Over!");
         gameWon = new GameEndScreen("You Won!");
         
@@ -59,8 +62,8 @@ public class GameWindow extends JFrame implements KeyEventObserver {
         cards.add(createMonster, "CREATE_MONSTER");
         cards.add(createMove, "CREATE_MOVE");
         cards.add(createTeam, "CREATE_TEAM");
+        cards.add(createItem, "CREATE_ITEM");
         cards.add(deleteMonster, "DELETE_MONSTER");
-        cards.add(battleScreen, "BATTLE_SCREEN");
         cards.add(gameOver, "GAME_OVER");
         cards.add(gameWon, "GAME_WON");
 
@@ -112,15 +115,21 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                         requestFocusInWindow();
                     }
                     if (selectedButton.getText().equals("BATTLE")) {
-                        SoundManager.playSound("Start.wav");
-                        gameState = GameState.BATTLE;
-                        battleScreen.refreshBattleScreen();
-                        cardLayout.show(cards, "BATTLE_SCREEN");
-                        pack();
-                        inputHandler.addObserver(battleScreen);
-                        inputHandler.removeObserver(modeSelect);
-                        requestFocusInWindow();
-                        // JOptionPane.showMessageDialog(this, "The battle mechanic will be implemented for the 2nd checkpoint");
+                        if (TeamService.getTeam().size() != 3) {
+                            JOptionPane.showMessageDialog(this, "You need 3 monsters in your team to battle!");
+                            return;
+                        } else {
+                            battleScreen = new BattleScreen(this);
+                            cards.add(battleScreen, "BATTLE_SCREEN");
+                            SoundManager.playSound("Start.wav");
+                            gameState = GameState.BATTLE;
+                            battleScreen.refreshBattleScreen();
+                            cardLayout.show(cards, "BATTLE_SCREEN");
+                            pack();
+                            inputHandler.addObserver(battleScreen);
+                            inputHandler.removeObserver(modeSelect);
+                            requestFocusInWindow();
+                        }
                     }
                 }
                 break;
@@ -177,6 +186,14 @@ public class GameWindow extends JFrame implements KeyEventObserver {
                         inputHandler.removeObserver(createSelect);
                         requestFocusInWindow();
                     }
+                    if (createButton.getText().equals("ITEM")) {
+                        SoundManager.playSound("Start.wav");
+                        gameState = GameState.CREATE_ITEM;
+                        cardLayout.show(cards, "CREATE_ITEM");
+                        pack();
+                        inputHandler.removeObserver(createSelect);
+                        requestFocusInWindow();
+                    }
                     if (createButton.getText().equals("DELETE MONSTER")) {
                         SoundManager.playSound("Start.wav");
                         gameState = GameState.DELETE_MONSTER;
@@ -204,6 +221,7 @@ public class GameWindow extends JFrame implements KeyEventObserver {
 
             case DELETE_MONSTER:
             case CREATE_MONSTER:
+            case CREATE_ITEM:
             case CREATE_TEAM:
             case CREATE_MOVE: {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 
 import entities.Monsters.Monster;
 import entities.Monsters.MonsterService;
-import entities.Player.Player;
+import entities.Player.TeamService;
 
 public class CreateTeamScreen extends JPanel {
     private final JComboBox<Monster> firstMonster;
@@ -117,29 +117,19 @@ public class CreateTeamScreen extends JPanel {
             monsters.add(monster3);
 
             try {
-                Player.updateTeam(monsters);
+                TeamService.updateTeam(monsters);
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                ex.printStackTrace();
             }
 
             JOptionPane.showMessageDialog(this, "Team Created!");
 
-            System.out.println("Team created with the following monsters:");
-
             try {
-                for (Monster m : Player.findAll()) {
-                    System.out.println(m);
-                }
+                firstMonster.setSelectedItem(TeamService.getTeam().get(0));
+                secondMonster.setSelectedItem(TeamService.getTeam().get(1));
+                thirdMonster.setSelectedItem(TeamService.getTeam().get(2));
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-
-            try {
-                firstMonster.setSelectedItem(Player.findAll().get(0));
-                secondMonster.setSelectedItem(Player.findAll().get(1));
-                thirdMonster.setSelectedItem(Player.findAll().get(2));
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                ex.printStackTrace();
             }
 
         } catch (NumberFormatException ex) {
@@ -151,18 +141,20 @@ public class CreateTeamScreen extends JPanel {
             firstMonster.removeAllItems();
             secondMonster.removeAllItems();
             thirdMonster.removeAllItems();
+            
             for (Monster m : MonsterService.getMonsters()) {
                 firstMonster.addItem(m);
                 secondMonster.addItem(m);
                 thirdMonster.addItem(m);
             }
-
+            
         try {
-            firstMonster.setSelectedItem(Player.findAll().get(0));
-            secondMonster.setSelectedItem(Player.findAll().get(1));
-            thirdMonster.setSelectedItem(Player.findAll().get(2));
+            List<Monster> team = TeamService.getTeam();
+            if (team.size() > 0) firstMonster.setSelectedItem(team.get(0));
+            if (team.size() > 1) secondMonster.setSelectedItem(team.get(1));
+            if (team.size() > 2) thirdMonster.setSelectedItem(team.get(2));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

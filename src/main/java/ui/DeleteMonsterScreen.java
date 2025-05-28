@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -78,9 +79,17 @@ public class DeleteMonsterScreen extends JPanel {
 
     private void deleteMonster(ActionEvent e) {
         try {
+            try {
+                List<Monster> monsters = MonsterService.getMonsters(); 
+                if (monsters.size() == 3) {
+                    JOptionPane.showMessageDialog(null, "You can't have less than 3 monsters at one time");
+                    return;
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
             Monster monster = (Monster) deletedMonster.getSelectedItem();
             MonsterService.deleteMonster(monster);
-            System.out.println("Monster: " + monster + " was deleted");
 
             JOptionPane.showMessageDialog(this, "Monster Deleted!");
             refreshMonsterBox();

@@ -12,7 +12,7 @@ import sound.SoundManager;
 
 public class CreateSelectScreen extends JPanel implements KeyEventObserver {
     private int selectedIndex = 0;
-    private final MenuButton[] menuButtons = new MenuButton[4];
+    private final MenuButton[] menuButtons = new MenuButton[5];
 
     public CreateSelectScreen() {
         setLayout(null);
@@ -25,11 +25,13 @@ public class CreateSelectScreen extends JPanel implements KeyEventObserver {
         MenuButton createMonster = new MenuButton("MONSTER");
         MenuButton createMove = new MenuButton("MOVE");
         MenuButton createTeam = new MenuButton("TEAM");
+        MenuButton createItem = new MenuButton("ITEM");
         MenuButton deleteMonster = new MenuButton("DELETE MONSTER");
         menuButtons[0] = createMonster;
         menuButtons[1] = createMove;
         menuButtons[2] = createTeam;
-        menuButtons[3] = deleteMonster;
+        menuButtons[3] = createItem;
+        menuButtons[4] = deleteMonster;
         createMonster.setSelected();
         int offset = 30;
         for (MenuButton button : menuButtons) {
@@ -55,21 +57,21 @@ public class CreateSelectScreen extends JPanel implements KeyEventObserver {
     public void onKeyEvent(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             selectedIndex += 1;
-            selectedIndex = (selectedIndex > 3) ? 0 : selectedIndex;
+            selectedIndex = (selectedIndex > 4) ? 0 : selectedIndex;
         }
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             selectedIndex -= 1;
-            selectedIndex = (selectedIndex < 0) ? 3 : selectedIndex;
+            selectedIndex = (selectedIndex < 0) ? 4 : selectedIndex;
         }
         menuButtons[selectedIndex].setSelected();
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i <= 4; i++) {
             if (i != selectedIndex) {
                 menuButtons[i].setDeselected();
             }
         }
         SoundManager.playSound("Select.wav");
         menuButtons[selectedIndex].setSelected();
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i <= 4; i++) {
             if (i != selectedIndex) {
                 menuButtons[i].setDeselected();
             }

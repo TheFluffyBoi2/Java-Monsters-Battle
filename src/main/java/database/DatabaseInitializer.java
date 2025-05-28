@@ -12,13 +12,13 @@ public class DatabaseInitializer {
             InputStream schemaStream = DatabaseManager.class.getClassLoader().getResourceAsStream("db/schema.sql");
             Statement stmt = c.createStatement()) {
             if (schemaStream == null) {
-                throw new IOException("Nu a fost gasit fisierul schema.sql");
+                throw new IOException("File schema.sql was not found.");
             }
             String sql = new String(schemaStream.readAllBytes());
             stmt.execute(sql);
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     } 
 }

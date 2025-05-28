@@ -2,7 +2,7 @@ package ui;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,7 +11,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -141,7 +143,6 @@ public class CreateMonsterScreen extends JPanel {
 
             Monster monster = new Monster(name, health, attack);
             MonsterService.addMonster(monster, selectedMoves);
-            System.out.println("Monster: " + monster + " was created");
 
             JOptionPane.showMessageDialog(this, "Monster Created!");
 

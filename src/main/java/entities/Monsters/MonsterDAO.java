@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import database.DatabaseManager;
 import entities.Type;
 import entities.Moves.FireMove;
@@ -17,7 +19,7 @@ public class MonsterDAO {
     public void insert(Monster monster, List<Move> moves) throws Exception {
         String sqlMonster = "INSERT INTO monster (name, health, attack) VALUES (?, ?, ?) RETURNING id;";
         String sqlMove = "SELECT id FROM move WHERE name=?;";
-        String sqlMonsterMove = "INSERT INTO monster_move (monster_id, move_id) VALUES (?, ?);";
+        String sqlMonsterMove = "INSERT INTO monster_move (monster_id, move_id) VALUES (?, ?) ON CONFLICT DO NOTHING;";
         try (Connection c = DatabaseManager.getConnection();
             PreparedStatement psMonster = c.prepareStatement(sqlMonster);
             PreparedStatement psMove = c.prepareStatement(sqlMove);
@@ -44,7 +46,7 @@ public class MonsterDAO {
                 }
 
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
     }
 
@@ -86,7 +88,7 @@ public class MonsterDAO {
                     monster.getMoves().add(move);
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
 
         return new ArrayList<>(monsterMap.values());
@@ -109,11 +111,11 @@ public class MonsterDAO {
                     deletePs.setInt(1, monsterId);
                     deletePs.executeUpdate();
                 } else {
-                    System.out.println("Monstrul nu a fost gasit!");
+                    System.out.println("The Monster was not found!");
                 }
 
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();;
             }
     }
 }

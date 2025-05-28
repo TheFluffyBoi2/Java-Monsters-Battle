@@ -10,7 +10,7 @@ public class Audit {
             LocalTime lt = LocalTime.now();
             pw.println(action + " " + lt);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

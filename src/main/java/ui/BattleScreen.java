@@ -14,12 +14,15 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
+import entities.Items.Item;
+import entities.Items.ItemService;
 import entities.Monsters.Monster;
 import entities.Monsters.MonsterService;
-import entities.Player.Player;
+import entities.Player.TeamService;
 import sound.SoundManager;
 
 public class BattleScreen extends JPanel implements KeyEventObserver {
@@ -31,7 +34,7 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
     private final JPanel playerPanel;
     private final MenuButton attack;
     private final MenuButton defend;
-    private final MenuButton save;
+    private final MenuButton items;
     private JPanel playerStats;
     private JPanel enemyStats;
     private JLabel playerMonsterName;
@@ -49,8 +52,10 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
     private Monster selectedEnemyMonster;
     private Timer hpAnimatedTimer;
     private Timer deathAnimatedTimer;
+    private Timer itemAnimatedTimer;
     private boolean animationPlaying = false;
     private boolean defending = false;
+    private boolean usingItem = false;
     private int currentSpriteYPosition;
 
     public BattleScreen(GameWindow gameWindow) {
@@ -60,15 +65,15 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
 
         attack = new MenuButton("ATTACK");
         defend = new MenuButton("DEFEND");
-        save = new MenuButton("SAVE");
+        items = new MenuButton("ITEMS");
         menuButtons[0] = attack;
         menuButtons[1] = defend;
-        menuButtons[2] = save;
+        menuButtons[2] = items;
         menuButtons[0].setSelected();
         
         optionsBackground.add(attack, BorderLayout.WEST);
         optionsBackground.add(defend, BorderLayout.CENTER);
-        optionsBackground.add(save, BorderLayout.EAST);
+        optionsBackground.add(items, BorderLayout.EAST);
 
         setPreferredSize(new Dimension(512, 512));
         setBackground(new Color(0, 0, 0));
@@ -110,11 +115,13 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
 
 
         try {
-            playerMonsters = Player.findAll();
+            playerMonsters = TeamService.getTeam();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        selectedPlayerMonster = playerMonsters.get(0);
+        if (playerMonsters.size() > 0) {
+            selectedPlayerMonster = playerMonsters.get(0);
+        }
         remainingPlayerHp = selectedPlayerMonster.getHealth();
 
         playerStats = new JPanel();
@@ -198,7 +205,7 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
     public void hideMenuButtons() {
         attack.setVisible(false);
         defend.setVisible(false);
-        save.setVisible(false);
+        items.setVisible(false);
         optionsBackground.revalidate();
         optionsBackground.repaint();
     }
@@ -206,7 +213,7 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
     public void showMenuButtons() {
         attack.setVisible(true);
         defend.setVisible(true);
-        save.setVisible(true);
+        items.setVisible(true);
         optionsBackground.revalidate();
         optionsBackground.repaint();
     }
@@ -214,6 +221,7 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
     @Override
     public void onKeyEvent(KeyEvent e) {
         if (animationPlaying) return;
+        if (usingItem) return;
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             MenuButton selectedButton = getSelectedButton();
             switch (selectedButton.getText()) {
@@ -300,6 +308,40 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
                     });
                     break;
                 }
+
+                case "ITEMS": {
+                    usingItem = true;
+                    List<Item> items = ItemService.getItems();
+                    if (items.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "You have no items.");
+                        return;
+                    }
+                    String[] itemNames = items.stream().map(Item::getName).toArray(String[]::new);
+
+                    String selectedItemName = (String) JOptionPane.showInputDialog(
+                        this,
+                        "Select an item",
+                        "Items:",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        itemNames,
+                        itemNames[0]
+                    );
+
+                    if (selectedItemName != null) {
+                        Item selectedItem = items.stream().filter(i -> i.getName().equals(selectedItemName))
+                            .findFirst()
+                            .orElse(null);
+                        
+                            if (selectedItem != null) {
+                                healingItemUsed(selectedItem.getHealingAmmount(), () -> {
+                                    usingItem = false;
+                                    animationPlaying = false;
+                                });
+                            }
+                    }
+                    break;
+                }
                 default:
                     break;
             }
@@ -351,6 +393,31 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
         hpAnimatedTimer.start();
     }
 
+    public void healingItemUsed(int healing_ammount, Runnable finished) {
+        animationPlaying = true;
+        int newHp = remainingPlayerHp + healing_ammount;
+        if (itemAnimatedTimer != null && itemAnimatedTimer.isRunning()) {
+            itemAnimatedTimer.stop();
+        }
+
+        itemAnimatedTimer = new Timer(15, null);
+        itemAnimatedTimer.addActionListener(e -> {
+            if (remainingPlayerHp == newHp || remainingPlayerHp >= selectedPlayerMonster.getHealth()) {
+                itemAnimatedTimer.stop();
+                finished.run();
+                return;
+            }
+            if (remainingPlayerHp < newHp) {
+                remainingPlayerHp++;
+            } else {
+                remainingPlayerHp--;
+            }
+            playerHpBar.setValue(remainingPlayerHp);
+        });
+
+        itemAnimatedTimer.start();
+    }
+
     public void playerHpChange(int newHp, Runnable finished) {
         animationPlaying = true;
         if (hpAnimatedTimer != null && hpAnimatedTimer.isRunning()) {
@@ -359,7 +426,7 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
 
         hpAnimatedTimer = new Timer(15, null);
         hpAnimatedTimer.addActionListener(e -> {
-            if (remainingPlayerHp == newHp || remainingEnemyHp < 0) {
+            if (remainingPlayerHp == newHp || remainingPlayerHp < 0) {
                 hpAnimatedTimer.stop();
                 finished.run();
                 return;
@@ -404,7 +471,7 @@ public class BattleScreen extends JPanel implements KeyEventObserver {
 
     public void refreshBattleScreen() {
         try {
-            playerMonsters = Player.findAll();
+            playerMonsters = TeamService.getTeam();
         } catch (Exception e) {
             e.printStackTrace();
         }

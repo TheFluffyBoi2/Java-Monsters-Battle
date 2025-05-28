@@ -7,6 +7,7 @@ public enum GameState {
     CREATE_MONSTER,
     CREATE_MOVE,
     CREATE_TEAM,
+    CREATE_ITEM,
     DELETE_MONSTER,
     BATTLE,
     GAME_END

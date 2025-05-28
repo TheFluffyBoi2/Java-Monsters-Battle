@@ -22,9 +22,15 @@ CREATE TABLE IF NOT EXISTS monster_move (
 
 CREATE TABLE IF NOT EXISTS team (
     id BOOLEAN PRIMARY KEY DEFAULT TRUE CHECK (id),
-    monster1_id INT REFERENCES monster(id),
-    monster2_id INT REFERENCES monster(id),
-    monster3_id INT REFERENCES monster(id)
+    monster1_id INT REFERENCES monster(id) ON DELETE CASCADE,
+    monster2_id INT REFERENCES monster(id) ON DELETE CASCADE,
+    monster3_id INT REFERENCES monster(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS item (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(15) NOT NULL,
+    healing_ammount INT NOT NULL
 );
 
 DO $$
@@ -52,6 +58,11 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM team) THEN
         INSERT INTO team (monster1_id, monster2_id, monster3_id) VALUES
             (1, 2, 3);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM item) THEN
+        INSERT INTO item (name, healing_ammount) VALUES 
+            ('Normal Potion', 20),
+            ('Super Potion', 100);
     END IF;
 END
 $$;
