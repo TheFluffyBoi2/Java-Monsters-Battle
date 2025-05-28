@@ -5,11 +5,17 @@ Jucatorii isi creeaza o echipa de monstri pe care o pot folosi intr-un sistem de
 ## Structura proiectului
 src/
 ├── entities/ - Clasele pentru gestionarea monstrilor, obiectelor si echipei
+
 ├── game/ - Game states
+
 ├── input/ - Gestionarea inputului
+
 ├── sound/ - Clasa pentru gestionarea efectelor sonore
+
 ├── ui/ - Clasele utlilzate pentru implementarea interfetei grafice in Swing
+
 ├── database/ - Datele necesare pentru conectarea si operatiilor JDBC
+
 └── Main.java - Clasa principala
 
 ## Cerinte
