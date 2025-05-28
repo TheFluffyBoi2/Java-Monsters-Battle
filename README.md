@@ -4,6 +4,7 @@ Jucatorii isi creeaza o echipa de monstri pe care o pot folosi intr-un sistem de
 
 ## Structura proiectului
 src/
+
 ├── entities/ - Clasele pentru gestionarea monstrilor, obiectelor si echipei
 
 ├── game/ - Game states
