@@ -9,7 +9,7 @@ import java.util.List;
 
 import database.DatabaseManager;
 
-public class ItemDAO {
+public class ItemCRUD {
     public void insert(Item item) throws Exception {
         String sql = "INSERT INTO item (name, healing_ammount) VALUES (?, ?);";
         try (Connection c = DatabaseManager.getConnection(); 

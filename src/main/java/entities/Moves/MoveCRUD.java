@@ -7,7 +7,7 @@ import java.util.List;
 import database.DatabaseManager;
 import entities.Type;
 
-public class MoveDAO {
+public class MoveCRUD {
     public void insert(Move move) throws Exception {
         String sql = "INSERT INTO move (name, type, damage, effect, effect_chance) VALUES (?, ?, ?, ?, ?);";
         try (Connection c = DatabaseManager.getConnection(); 

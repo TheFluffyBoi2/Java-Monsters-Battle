@@ -10,7 +10,7 @@ import java.util.List;
 import database.DatabaseManager;
 import entities.Monsters.Monster;
 
-public class TeamDAO {
+public class TeamCRUD {
     public List<Monster> findAll() throws Exception {
         String sql = "SELECT monster1_id, monster2_id, monster3_id FROM team;";
         String monsterSql = "SELECT name, health, attack FROM monster WHERE id=?;";

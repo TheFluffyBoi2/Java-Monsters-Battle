@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import database.DatabaseManager;
 import entities.Type;
 import entities.Moves.FireMove;
@@ -15,7 +13,7 @@ import entities.Moves.GrassMove;
 import entities.Moves.Move;
 import entities.Moves.WaterMove;
 
-public class MonsterDAO {
+public class MonsterCRUD {
     public void insert(Monster monster, List<Move> moves) throws Exception {
         String sqlMonster = "INSERT INTO monster (name, health, attack) VALUES (?, ?, ?) RETURNING id;";
         String sqlMove = "SELECT id FROM move WHERE name=?;";

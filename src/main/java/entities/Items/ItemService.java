@@ -5,15 +5,15 @@ import java.util.List;
 import audit.Audit;
 
 public class ItemService {
-    private static final ItemDAO DAO;
+    private static final ItemCRUD CRUD;
 
     static {
-        DAO = new ItemDAO();
+        CRUD = new ItemCRUD();
     }
 
     public static void addItem(Item item) {
         try {
-            DAO.insert(item);
+            CRUD.insert(item);
             Audit.writeAudit("Add Item");
         } catch (Exception e) {
             e.printStackTrace();
@@ -23,7 +23,7 @@ public class ItemService {
     public static List<Item> getItems() {
         try {
             Audit.writeAudit("Get Items");
-            return DAO.findAll();
+            return CRUD.findAll();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,15 +6,15 @@ import java.util.List;
 import audit.Audit;
 
 public class MoveService {
-    private static final MoveDAO DAO;
+    private static final MoveCRUD CRUD;
 
     static {
-        DAO = new MoveDAO(); 
+        CRUD = new MoveCRUD(); 
     }
 
     public static void addMove(Move move) {
         try {
-            DAO.insert(move);
+            CRUD.insert(move);
             Audit.writeAudit("Add Move");
         } catch (Exception e) {
             e.printStackTrace();
@@ -24,7 +24,7 @@ public class MoveService {
     public static List<Move> getMoves() {
         try {
             Audit.writeAudit("Get Moves");
-            return DAO.findAll();
+            return CRUD.findAll();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();

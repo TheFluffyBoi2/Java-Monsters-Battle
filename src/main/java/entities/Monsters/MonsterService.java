@@ -7,15 +7,15 @@ import audit.Audit;
 import entities.Moves.Move;
 
 public class MonsterService {
-    private static final MonsterDAO DAO;
+    private static final MonsterCRUD CRUD;
 
     static {
-        DAO = new MonsterDAO();
+        CRUD = new MonsterCRUD();
     }
 
     public static void addMonster(Monster monster, List<Move> moves) {
         try {
-            DAO.insert(monster, moves); 
+            CRUD.insert(monster, moves); 
             Audit.writeAudit("Add Monster");
         } catch (Exception e) {
             e.printStackTrace();
@@ -24,7 +24,7 @@ public class MonsterService {
 
     public static void deleteMonster(Monster monster) {
         try {
-            DAO.deleteMonster(monster);
+            CRUD.deleteMonster(monster);
             Audit.writeAudit("Delete Monster");
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,7 +34,7 @@ public class MonsterService {
     public static List<Monster> getMonsters() {
         try {
             Audit.writeAudit("Get Monsters");
-            return DAO.findAll();
+            return CRUD.findAll();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
